@@ -28,7 +28,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Seletor de tema
-modo_claro = st.sidebar.toggle("🌗 Modo Escuro", value=True)
+modo_claro = st.sidebar.toggle("🌗 Sair do modo claro", value=True)
 
 # Define o CSS com base na escolha
 if modo_claro:
@@ -170,17 +170,21 @@ select:focus, input:focus, textarea:focus {{
 """, unsafe_allow_html=True)
 
 def check_password():
-    password = st.text_input("Senha:", type="password")
-    return password == "Feminina@1105"
+    if "senha_correta" not in st.session_state:
+        st.session_state.senha_correta = False
 
-if check_password():
-    st.title("App Protegido")
-    st.write("Conteúdo secreto aqui.")
-else:
-    st.warning("Senha incorreta ou não fornecida.")
+    if not st.session_state.senha_correta:
+        senha = st.text_input("Senha:", type="password")
+        if senha == "Feminina@1105":
+            st.session_state.senha_correta = True
+        else:
+            if senha:
+                st.error("Senha incorreta. Tente novamente.")
+        return False
+    else:
+        return True
 
     
-
 # Carregar dados
 df = pd.read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vQoWbw52QOM46a6cXlB_rbpgRx3mvHxPW-NbcBqH5rGz0paWFkHpZx8jEjPpsBjnAeEtJTZng0rpHcx/pub?output=csv")
 
@@ -376,6 +380,12 @@ if "Local do incidente:" in df_filtrado.columns:
     fig_lojas = px.bar(incidentes_por_loja, x="Loja", y="Quantidade", title="Incidentes por Loja", labels={"Loja": "Local do Incidente", "Quantidade": "Quantidade de Incidentes"}, template="plotly_dark")
     fig_lojas.update_traces(marker_color='#5BC0BE')
     st.plotly_chart(fig_lojas, use_container_width=True)
+
+# Gráfico - numero de incidente por cada loja
+    st.markdown("## 🏬Total de incidente por cada loja:")
+    total_inci = df_filtrado["Local do incidente:", "Tipo de incidente"].value_counts().reset_index()
+    fig_total_inci = px.bar(total_inci, x="Local do incidente", color="Tipo de incidente:")
+    st.plotly_chart(fig_total_inci, use_container_width=True)
 
 # Gráfico - Incidentes por Colaborador
 if "Responsável" in df_filtrado.columns:
