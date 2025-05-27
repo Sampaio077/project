@@ -177,12 +177,13 @@ def check_password():
         senha = st.text_input("Senha:", type="password")
         if senha == "Feminina@1105":
             st.session_state.senha_correta = True
-        else:
-            if senha:
-                st.error("Senha incorreta. Tente novamente.")
+            st.experimental_rerun()  # força recarregar a página com acesso liberado
+        elif senha:
+            st.error("Senha incorreta. Tente novamente.")
         return False
     else:
         return True
+
 
     
 # Carregar dados
