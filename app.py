@@ -28,25 +28,24 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Seletor de tema
-modo_escuro = st.sidebar.toggle("🌗 Modo Escuro", value=True)
+modo_claro = st.sidebar.toggle("🌗 Modo Escuro", value=True)
 
 # Define o CSS com base na escolha
-if modo_escuro:
-    cor_fundo = "#000000"
-    cor_sidebar = "#000000F8"
-    cor_texto = "#987748"
-    cor_kpi_fundo = "#010618"
-else:
+if modo_claro:
     cor_fundo = "#F5F5F5"
     cor_sidebar = "#FFFFFF"
     cor_texto = "#947952"
     cor_kpi_fundo = "#E6E6E6"
-
+else:
+    cor_fundo = "#000000"
+    cor_sidebar = "#000000F8"
+    cor_texto = "#987748"
+    cor_kpi_fundo = "#010618"
 # Insere o CSS dinâmico
 st.markdown(f"""
 <style>
 html {{
-    color-scheme: {'light' if modo_escuro else 'dark'};
+    color-scheme: {'light' if modo_claro else 'dark'};
 }}
 
 html, body, .main {{
@@ -171,8 +170,8 @@ select:focus, input:focus, textarea:focus {{
 """, unsafe_allow_html=True)
 
 def check_password():
-    password = st.text_input("Senha: Fiscais@1105", type="password")
-    return password == "minha_senha"
+    password = st.text_input("Senha:", type="password")
+    return password == "Feminina@1105"
 
 if check_password():
     st.title("App Protegido")
