@@ -34,7 +34,7 @@ modo_claro = st.sidebar.toggle("🌗 Sair do modo claro", value=True)
 if modo_claro:
     cor_fundo = "#F5F5F5"
     cor_sidebar = "#FFFFFF"
-    cor_texto = "#947952"
+    cor_texto = "#CCB17C"
     cor_kpi_fundo = "#E6E6E6"
 else:
     cor_fundo = "#000000"
