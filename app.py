@@ -381,17 +381,6 @@ if "Responsável" in df_filtrado.columns:
     fig_colab = px.bar(incidentes_por_colaborador, x="Colaborador", y="Quantidade", title="Incidentes por Colaborador", labels={"Colaborador": "Responsável", "Quantidade": "Quantidade de Incidentes"}, template="plotly_dark")
     fig_colab.update_traces(marker_color='#5BC0BE')
     st.plotly_chart(fig_colab, use_container_width=True)
-    
-# Gráfico - Linha 3 (empilhado)
-st.markdown("### 📑 Incidentes por Fiscal e Tipo")
-inci_fiscal = df_filtrado.groupby(["Nome", "Tipo de incidente:"]).size().reset_index(name="Quantidade")
-fig5 = px.bar(
-    inci_fiscal,
-    x="Nome",
-    y="Quantidade",
-    color="Tipo de incidente:",
-    title="🧩 Registro por Colaborador (Empilhado por Tipo de Incidente)",
-    
 
 # Gráfico - Incidentes por Loja
 if "Local do incidente:" in df_filtrado.columns:
@@ -402,7 +391,8 @@ if "Local do incidente:" in df_filtrado.columns:
     fig_lojas.update_traces(marker_color='#5BC0BE')
     st.plotly_chart(fig_lojas, use_container_width=True)
 
-st.markdown("## 🏬 Total de incidentes por loja e tipo:")
+# Gráfico - numero de incidente por cada loja
+    st.markdown("## 🏬 Total de incidentes por loja e tipo:")
 
 # Agrupa e conta
 total_inci = (
@@ -425,7 +415,18 @@ fig_total_inci = px.bar(
 # Exibe o gráfico responsivamente
 st.plotly_chart(fig_total_inci, use_container_width=True)
     
-
+# Gráfico - Linha 3 (empilhado)
+st.markdown("### 📑 Incidentes por Fiscal e Tipo")
+inci_fiscal = df_filtrado.groupby(["Nome", "Tipo de incidente:"]).size().reset_index(name="Quantidade")
+fig5 = px.bar(
+    inci_fiscal,
+    x="Nome",
+    y="Quantidade",
+    color="Tipo de incidente:",
+    title="🧩 Registro por Colaborador (Empilhado por Tipo de Incidente)",
+)
+fig5.update_layout(barmode="stack")
+st.plotly_chart(fig5, use_container_width=True)
 
 # Gráfico - Incidentes por Hora
 df_filtrado["Hora"] = df_filtrado["Dia/hora do incidente:"].dt.hour
