@@ -10,15 +10,17 @@ from PIL import Image
 import requests
 from io import BytesIO
 from tenacity import _unset
+import streamlit as st
+from pathlib import Path
+import re
+from PIL import Image
+import requests
+from io import BytesIO
+from tenacity import _unset
 
-# Configurar idioma
-try:
-    locale.setlocale(locale.LC_TIME, 'Portuguese_Brazil.1252')
-except locale.Error:
-    st.warning("⚠️ Locale 'Portuguese_Brazil.1252' não está disponível no seu sistema.")
-
-# Configuração da página
+# Config
 st.set_page_config(page_title="Visão Geral de Incidentes", layout="wide", page_icon="📊")
+
 
 # Font Awesome
 st.markdown("""
