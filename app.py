@@ -405,7 +405,6 @@ pivot_tipo_loja = df_filtrado.pivot_table(
     fill_value=0
 )
 
-# Depois ordena as lojas com mais incidentes no topo
 pivot_tipo_loja = pivot_tipo_loja.loc[pivot_tipo_loja.sum(axis=1).sort_values(ascending=False).index]
 
 # Cria o heatmap
@@ -418,10 +417,6 @@ fig_heatmap = px.imshow(
 )
 
 st.plotly_chart(fig_heatmap, use_container_width=True)
-
-
-
-
 
 
 
