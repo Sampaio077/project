@@ -46,7 +46,7 @@ else:
 st.markdown(f"""
 <style>
 html {{
-    color-scheme: {'dark' if modo_escuro else 'light'};
+    color-scheme: {'light' if modo_escuro else 'dark'};
 }}
 
 html, body, .main {{
@@ -171,7 +171,7 @@ select:focus, input:focus, textarea:focus {{
 """, unsafe_allow_html=True)
 
 def check_password():
-    password = st.text_input("Senha:", type="password")
+    password = st.text_input("Senha: Fiscais@1105", type="password")
     return password == "minha_senha"
 
 if check_password():
@@ -189,7 +189,6 @@ df = pd.read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vQoWbw52QOM46a
 df["Dia/hora do incidente:"] = pd.to_datetime(df["Dia/hora do incidente:"], errors='coerce', dayfirst=True)
 df = df.dropna(subset=["Dia/hora do incidente:"])
 df = df.sort_values("Dia/hora do incidente:")
-df
 
 meses_pt = {1: "Janeiro", 2: "Fevereiro", 3: "Março", 4: "Abril", 5: "Maio", 6: "Junho",
             7: "Julho", 8: "Agosto", 9: "Setembro", 10: "Outubro", 11: "Novembro", 12: "Dezembro"}
@@ -492,3 +491,9 @@ fig_dia_semana = px.bar(
 )
 fig_dia_semana.update_traces(marker_color="#F9A03F")
 st.plotly_chart(fig_dia_semana, use_container_width=True)
+
+with st.expander("📊 Visualizar dados brutos", expanded=False):
+    mostrar = st.toggle("👁️ Mostrar dados")
+    if mostrar:
+        st.dataframe(df, use_container_width=True)
+
