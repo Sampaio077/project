@@ -368,14 +368,15 @@ with col8:
 # Pizza - Registro de Fiscais por colaborador
     regi_colabora = (df_filtrado.groupby(["Nome", "Tipo de incidente:"]).size().reset_index(name="count"))
     # Cria gráfico de barras
-fig_total_inci = px.pie(
+fig_regi_colabora = px.pie(
     regi_colabora,
     x="Nome",
     y="count",
     color="Tipo de incidente:",
     title="Total de registro de loja e colaborador"
 )
-    
+st.plotly_chart(fig_regi_colabora, use_container_width=True)
+
 # Gráfico - Incidentes por Hora
 st.markdown("## 📊 Incidentes por Hora do Dia")
 df_filtrado['Hora'] = df_filtrado['Dia/hora do incidente:'].dt.hour
