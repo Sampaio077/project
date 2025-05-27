@@ -384,14 +384,45 @@ fig_heatmap = px.imshow(
 
 st.plotly_chart(fig_heatmap, use_container_width=True)
 
+# Gráfico - Linha 3 (empilhado)
+st.markdown("### 📑 Incidentes por Fiscal e Tipo")
+inci_fiscal = df_filtrado.groupby(["Nome", "Tipo de incidente:"]).size().reset_index(name="Quantidade")
+fig5 = px.bar(
+    inci_fiscal,
+    x="Nome",
+    y="Quantidade",
+    color="Tipo de incidente:",
+    title="🧩 Registro por Colaborador (Empilhado por Tipo de Incidente)",
+)
+fig5.update_layout(barmode="stack")
+st.plotly_chart(fig5, use_container_width=True)
 
-# Gráfico - Incidentes por Hora
-st.markdown("## 📊 Incidentes por Hora do Dia")
-df_filtrado['Hora'] = df_filtrado['Dia/hora do incidente:'].dt.hour
-incidentes_por_hora = df_filtrado.groupby("Hora").size().reset_index(name="Quantidade")
-fig_horas = px.bar(incidentes_por_hora, x="Hora", y="Quantidade", title="Incidentes por Hora", labels={"Hora": "Hora do Dia", "Quantidade": "Quantidade de Incidentes"}, template="plotly_dark")
-fig_horas.update_traces(marker_color='#5BC0BE')
-st.plotly_chart(fig_horas, use_container_width=True)
+#Gráfico Distribuição
+pivot_tipo_loja = df_filtrado.pivot_table(
+    index="Local do incidente:",
+    columns="Tipo de incidente:",
+    aggfunc="size",
+    fill_value=0
+)
+
+# Depois ordena as lojas com mais incidentes no topo
+pivot_tipo_loja = pivot_tipo_loja.loc[pivot_tipo_loja.sum(axis=1).sort_values(ascending=False).index]
+
+# Cria o heatmap
+fig_heatmap = px.imshow(
+    pivot_tipo_loja,
+    labels=dict(x="Tipo de Incidente", y="Loja", color="Quantidade"), 
+    title="🚨 Frequência de Tipos de Incidentes por Loja",
+    aspect="auto",
+    color_continuous_scale="Viridis"
+)
+
+st.plotly_chart(fig_heatmap, use_container_width=True)
+
+
+
+
+
 
 
 # Gráfico - Incidentes por Colaborador
@@ -436,20 +467,15 @@ fig_total_inci = px.bar(
 # Exibe o gráfico responsivamente
 st.plotly_chart(fig_total_inci, use_container_width=True)
     
-# Gráfico - Linha 3 (empilhado)
-st.markdown("### 📑 Incidentes por Fiscal e Tipo")
-inci_fiscal = df_filtrado.groupby(["Nome", "Tipo de incidente:"]).size().reset_index(name="Quantidade")
-fig5 = px.bar(
-    inci_fiscal,
-    x="Nome",
-    y="Quantidade",
-    color="Tipo de incidente:",
-    title="🧩 Registro por Colaborador (Empilhado por Tipo de Incidente)",
-)
-fig5.update_layout(barmode="stack")
-st.plotly_chart(fig5, use_container_width=True)
+# Gráfico - Incidentes por Hora por hora
+st.markdown("## 📊 Incidentes por Hora do Dia")
+df_filtrado['Hora'] = df_filtrado['Dia/hora do incidente:'].dt.hour
+incidentes_por_hora = df_filtrado.groupby("Hora").size().reset_index(name="Quantidade")
+fig_horas = px.bar(incidentes_por_hora, x="Hora", y="Quantidade", title="Incidentes por Hora", labels={"Hora": "Hora do Dia", "Quantidade": "Quantidade de Incidentes"}, template="plotly_dark")
+fig_horas.update_traces(marker_color='#5BC0BE')
+st.plotly_chart(fig_horas, use_container_width=True)
 
-# Gráfico - Incidentes por Hora
+# Gráfico - Incidentes por Hora do dia
 df_filtrado["Hora"] = df_filtrado["Dia/hora do incidente:"].dt.hour
 incidentes_por_hora = df_filtrado.groupby("Hora").size().reset_index(name="Quantidade")
 
@@ -493,16 +519,6 @@ fig_tempo.update_traces(line=dict(color="#23C2F7"))
 
 st.plotly_chart(fig_tempo, use_container_width=True)
 
-#Gráfico Distribuição
-pivot_tipo_loja = df_filtrado.pivot_table(index="Local do incidente:", columns="Tipo de incidente:", aggfunc="size", fill_value=0)
-fig_heatmap = px.imshow(pivot_tipo_loja, labels=dict(x="Tipo de Incidente", y="Loja", color="Quantidade"), 
-                        title="🚨 Frequência de Tipos de Incidentes por Loja", aspect="auto", color_continuous_scale="Viridis")
-st.plotly_chart(fig_heatmap, use_container_width=True)
-
-fig_hist = px.histogram(df_sorted, x="Delta_minutos", nbins=30, title="🧮 Distribuição de Tempo Entre Ocorrências (min)", 
-                        labels={"Delta_minutos": "Intervalo (min)"}, template="plotly_dark")
-fig_hist.update_traces(marker_color="#6A5ACD")
-st.plotly_chart(fig_hist, use_container_width=True)
 
 
 # Mapear dia da semana manualmente
