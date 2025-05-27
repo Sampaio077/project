@@ -364,21 +364,25 @@ with col7:
         fig_turno = px.pie(turno_counts, names="Turno", values="Quantidade", title="🕐 Distribuição de Incidentes por Turno")
         st.plotly_chart(fig_turno, use_container_width=True)
         
-with col8:
-    # Agrupa os dados por colaborador e tipo de incidente
-    regi_colabora = df_filtrado.groupby(["Nome", "Tipo de incidente:"]).size().reset_index(name="count")
+# Cria a tabela cruzada
+heatmap_data = pd.crosstab(df_filtrado["Local do incidente:"], df_filtrado["Nome"])
 
-    # Gráfico de pizza mostrando número total de incidentes por colaborador
-    fig_bar_colabora = px.bar(
-    regi_colabora,
-    x="Nome",
-    y="count",
-    color="Tipo de incidente:",
-    title="Registros por colaborador e tipo de incidente"
+    # Ordena as lojas (linhas) pela soma total de incidentes
+heatmap_data = heatmap_data.loc[heatmap_data.sum(axis=1).sort_values(ascending=False).index]
+
+    # Ordena os colaboradores (colunas) pela soma total de incidentes
+heatmap_data = heatmap_data[heatmap_data.sum().sort_values(ascending=False).index]
+
+# Cria o heatmap
+fig_heatmap = px.imshow(
+    heatmap_data,
+    text_auto=True,
+    aspect="auto",
+    labels=dict(x="Colaborador", y="Loja", color="Quantidade"),
+    title="Mapa de Calor - Incidentes por Colaborador e Loja (Ordenado)"
 )
 
-st.plotly_chart(fig_bar_colabora, use_container_width=True)
-
+st.plotly_chart(fig_heatmap, use_container_width=True)
 
 
 # Gráfico - Incidentes por Hora
