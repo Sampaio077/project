@@ -27,6 +27,22 @@ st.markdown("""
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 """, unsafe_allow_html=True)
 
+def check_password():
+    if "senha_correta" not in st.session_state:
+        st.session_state.senha_correta = False
+
+    if not st.session_state.senha_correta:
+        senha = st.text_input("Senha:", type="password")
+        if senha == "Feminina@1105":
+            st.session_state.senha_correta = True
+            st.experimental_rerun()  # força recarregar a página com acesso liberado
+        elif senha:
+            st.error("Senha incorreta. Tente novamente.")
+        return False
+    else:
+        return True
+
+
 # Seletor de tema
 modo_claro = st.sidebar.toggle("🌗 Sair do modo claro", value=True)
 
@@ -168,22 +184,6 @@ select:focus, input:focus, textarea:focus {{
 }}
 </style>
 """, unsafe_allow_html=True)
-
-def check_password():
-    if "senha_correta" not in st.session_state:
-        st.session_state.senha_correta = False
-
-    if not st.session_state.senha_correta:
-        senha = st.text_input("Senha:", type="password")
-        if senha == "Feminina@1105":
-            st.session_state.senha_correta = True
-            st.experimental_rerun()  # força recarregar a página com acesso liberado
-        elif senha:
-            st.error("Senha incorreta. Tente novamente.")
-        return False
-    else:
-        return True
-
 
     
 # Carregar dados
