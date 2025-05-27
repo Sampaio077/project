@@ -364,6 +364,20 @@ with col7:
         fig_turno = px.pie(turno_counts, names="Turno", values="Quantidade", title="🕐 Distribuição de Incidentes por Turno")
         st.plotly_chart(fig_turno, use_container_width=True)
         
+
+# Gráfico - Linha 3 (empilhado)
+st.markdown("### 📑 Incidentes por Fiscal e Tipo")
+inci_fiscal = df_filtrado.groupby(["Nome", "Tipo de incidente:"]).size().reset_index(name="Quantidade")
+fig5 = px.bar(
+    inci_fiscal,
+    x="Nome",
+    y="Quantidade",
+    color="Tipo de incidente:",
+    title="🧩 Registro por Colaborador (Empilhado por Tipo de Incidente)",
+)
+fig5.update_layout(barmode="stack")
+st.plotly_chart(fig5, use_container_width=True)
+
 # Cria a tabela cruzada
 heatmap_data = pd.crosstab(df_filtrado["Local do incidente:"], df_filtrado["Nome"])
 
@@ -384,18 +398,6 @@ fig_heatmap = px.imshow(
 
 st.plotly_chart(fig_heatmap, use_container_width=True)
 
-# Gráfico - Linha 3 (empilhado)
-st.markdown("### 📑 Incidentes por Fiscal e Tipo")
-inci_fiscal = df_filtrado.groupby(["Nome", "Tipo de incidente:"]).size().reset_index(name="Quantidade")
-fig5 = px.bar(
-    inci_fiscal,
-    x="Nome",
-    y="Quantidade",
-    color="Tipo de incidente:",
-    title="🧩 Registro por Colaborador (Empilhado por Tipo de Incidente)",
-)
-fig5.update_layout(barmode="stack")
-st.plotly_chart(fig5, use_container_width=True)
 
 #Gráfico Distribuição
 pivot_tipo_loja = df_filtrado.pivot_table(
