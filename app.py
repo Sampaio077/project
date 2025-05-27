@@ -365,17 +365,21 @@ with col7:
         st.plotly_chart(fig_turno, use_container_width=True)
         
 with col8:
-# Pizza - Registro de Fiscais por colaborador
-    regi_colabora = (df_filtrado.groupby(["Nome", "Tipo de incidente:"]).size().reset_index(name="count"))
-    # Cria gráfico de barras
-fig_regi_colabora = px.pie(
+    # Agrupa os dados por colaborador e tipo de incidente
+    regi_colabora = df_filtrado.groupby(["Nome", "Tipo de incidente:"]).size().reset_index(name="count")
+
+    # Gráfico de pizza mostrando número total de incidentes por colaborador
+    fig_bar_colabora = px.bar(
     regi_colabora,
     x="Nome",
     y="count",
     color="Tipo de incidente:",
-    title="Total de registro de loja e colaborador"
+    title="Registros por colaborador e tipo de incidente"
 )
-st.plotly_chart(fig_regi_colabora, use_container_width=True)
+
+st.plotly_chart(fig_bar_colabora, use_container_width=True)
+
+
 
 # Gráfico - Incidentes por Hora
 st.markdown("## 📊 Incidentes por Hora do Dia")
