@@ -363,6 +363,18 @@ with col7:
 
         fig_turno = px.pie(turno_counts, names="Turno", values="Quantidade", title="🕐 Distribuição de Incidentes por Turno")
         st.plotly_chart(fig_turno, use_container_width=True)
+        
+with col8:
+# Pizza - Registro de Fiscais por colaborador
+    regi_colabora = (df_filtrado.groupby(["Nome", "Tipo de incidente:"]).size().reset_index(name="count"))
+    # Cria gráfico de barras
+fig_total_inci = px.pie(
+    regi_colabora,
+    x="Nome",
+    y="count",
+    color="Tipo de incidente:",
+    title="Total de registro de loja e colaborador"
+)
     
 # Gráfico - Incidentes por Hora
 st.markdown("## 📊 Incidentes por Hora do Dia")
@@ -472,9 +484,7 @@ fig_tempo.update_traces(line=dict(color="#23C2F7"))
 
 st.plotly_chart(fig_tempo, use_container_width=True)
 
-
-
-
+#Gráfico Distribuição
 pivot_tipo_loja = df_filtrado.pivot_table(index="Local do incidente:", columns="Tipo de incidente:", aggfunc="size", fill_value=0)
 fig_heatmap = px.imshow(pivot_tipo_loja, labels=dict(x="Tipo de Incidente", y="Loja", color="Quantidade"), 
                         title="🚨 Frequência de Tipos de Incidentes por Loja", aspect="auto", color_continuous_scale="Viridis")
